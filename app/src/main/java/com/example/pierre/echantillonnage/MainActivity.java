@@ -40,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private int counter;
 
+    private int nb_val = 0;
+    private long last_time = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +78,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         counter = 0;
     }
 
-
+    //adb shell
+    //cd /storage/emulated/0/echantillonnage
+    //data.txt
+    //adb pull /storage/emulated/0/echantillonnage/data.txt ./
 
     protected void onPause() {
         super.onPause();
@@ -84,8 +90,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     protected void onResume() {
         super.onResume();
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener(this, gravity, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, accelerometer, 20000);
+//        sensorManager.registerListener(this, gravity, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -124,17 +130,27 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         Sensor mySensor = event.sensor;
 
         if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            long curTime = System.currentTimeMillis() - startTime;
+            if(nb_val == 0)
+            {
+                last_time = curTime;
+            }
+            nb_val++;
+            if(Math.abs(last_time - curTime) > 1000)
+            {
+                writeFile(Long.toString(nb_val) + "\n");
+                nb_val = 0;
+            }
             float x = event.values[0];
             float y = event.values[1];
             float z = event.values[2];
 
-            Log.w("X = ", Float.toString(x));
-            Log.w("Y = ", Float.toString(y));
-            Log.w("Z = ", Float.toString(z));
-            long curTime = System.currentTimeMillis() - startTime;
-            String print = Long.toString(curTime) + " ; " + Float.toString(x) + "\n";
-            writeFile(print);
-            Log.w("counter", Integer.toString(counter));
+//            Log.w("X = ", Float.toString(x));
+//            Log.w("Y = ", Float.toString(y));
+//            Log.w("Z = ", Float.toString(z));
+//            String print = Long.toString(curTime) + " ; " + Float.toString(x) + "\n";
+//            writeFile(print);
+//            Log.w("counter", Integer.toString(counter));
             counter++;
             TextView textViewX = (TextView) findViewById(R.id.x);
             TextView textViewY = (TextView) findViewById(R.id.y);
