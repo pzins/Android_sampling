@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     protected void onResume() {
         super.onResume();
-        sensorManager.registerListener(this, accelerometer, 20000);
+        sensorManager.registerListener(this, accelerometer, 5000);
 //        sensorManager.registerListener(this, gravity, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
@@ -131,7 +131,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             long curTime = System.currentTimeMillis() - startTime;
-            if(nb_val == 0)
+            writeFile(Long.toString(curTime)+  "\n");
+   /*         if(nb_val == 0)
             {
                 last_time = curTime;
             }
@@ -140,10 +141,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             {
                 writeFile(Long.toString(nb_val) + "\n");
                 nb_val = 0;
-            }
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
+            }*/
+//            float x = event.values[0];
+//            float y = event.values[1];
+//            float z = event.values[2];
 
 //            Log.w("X = ", Float.toString(x));
 //            Log.w("Y = ", Float.toString(y));
@@ -151,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 //            String print = Long.toString(curTime) + " ; " + Float.toString(x) + "\n";
 //            writeFile(print);
 //            Log.w("counter", Integer.toString(counter));
-            counter++;
+           /* counter++;
             TextView textViewX = (TextView) findViewById(R.id.x);
             TextView textViewY = (TextView) findViewById(R.id.y);
             TextView textViewZ = (TextView) findViewById(R.id.z);
@@ -162,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
             last_x = x;
             last_y = y;
-            last_z = z;
+            last_z = z;*/
         }
 
 
